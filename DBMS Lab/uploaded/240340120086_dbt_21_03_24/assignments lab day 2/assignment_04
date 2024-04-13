@@ -1,0 +1,159 @@
+create database college;
+
+
+use college;
+
+
+mysql> create table student (
+    -> roll int primary key,
+    -> name varchar(20) not null,
+    -> marks float not null,
+    -> age int check (age>18) );
+Query OK, 0 rows affected (0.03 sec)
+
+
+mysql> insert into student (roll,name,marks,age) values (1,"chetu",90.60,34), (2,"kiran",95.60,24), (3,"xyz",56.60,30),(4,"abc",66.60,24),(5,"qwerty",89.60,40);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+
+mysql> alter table student drop check student_chk_1 ;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+mysql> ALTER TABLE student MODIFY marks int unique;
+Query OK, 5 rows affected (0.07 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+
+mysql> ALTER TABLE student
+    -> ADD CONSTRAINT name UNIQUE (name);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+mysql> ALTER TABLE student drop index marks; 
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+mysql> ALTER TABLE student drop index name; 
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+mysql> ALTER TABLE student drop primary key; 
+Query OK, 5 rows affected (0.05 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+
+mysql> insert into student (roll,name,marks,age) values (1,90.60,34);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> select count(roll) from student;
++-------------+
+| count(roll) |
++-------------+
+|           5 |
++-------------+
+1 row in set (0.00 sec)
+
+
+mysql> select sum(marks) from student;
++------------+
+| sum(marks) |
++------------+
+|        401 |
++------------+
+1 row in set (0.00 sec)
+
+
+mysql> select max(marks) from student;
++------------+
+| max(marks) |
++------------+
+|         96 |
++------------+
+1 row in set (0.00 sec)
+
+
+mysql> select min(marks) from student;
++------------+
+| min(marks) |
++------------+
+|         57 |
++------------+
+1 row in set (0.00 sec)
+
+
+mysql> select avg(marks) from student;
++------------+
+| avg(marks) |
++------------+
+|    80.2000 |
++------------+
+1 row in set (0.00 sec)
+
+
+mysql> select max(age) from student;
++----------+
+| max(age) |
++----------+
+|       40 |
++----------+
+1 row in set (0.00 sec)
+
+
+mysql> select min(age) from student;
++----------+
+| min(age) |
++----------+
+|       24 |
++----------+
+1 row in set (0.00 sec)
+
+
+mysql> select * from student order by roll;
++------+--------+-------+------+
+| roll | name   | marks | age  |
++------+--------+-------+------+
+|    1 | chetu  |    91 |   34 |
+|    2 | kiran  |    96 |   24 |
+|    3 | xyz    |    57 |   30 |
+|    4 | abc    |    67 |   24 |
+|    5 | qwerty |    90 |   40 |
++------+--------+-------+------+
+5 rows in set (0.00 sec)
+
+
+mysql> select * from student order by roll desc;
++------+--------+-------+------+
+| roll | name   | marks | age  |
++------+--------+-------+------+
+|    5 | qwerty |    90 |   40 |
+|    4 | abc    |    67 |   24 |
+|    3 | xyz    |    57 |   30 |
+|    2 | kiran  |    96 |   24 |
+|    1 | chetu  |    91 |   34 |
++------+--------+-------+------+
+5 rows in set (0.00 sec)
+
+
+mysql> SELECT * FROM student
+    -> WHERE name LIKE 'a%'; 
++------+------+-------+------+
+| roll | name | marks | age  |
++------+------+-------+------+
+|    4 | abc  |    67 |   24 |
++------+------+-------+------+
+1 row in set (0.00 sec)
+
+
+mysql> SELECT * FROM student WHERE name LIKE '%____u%';
++------+-------+-------+------+
+| roll | name  | marks | age  |
++------+-------+-------+------+
+|    1 | chetu |    91 |   34 |
++------+-------+-------+------+
+1 row in set (0.00 sec)
+

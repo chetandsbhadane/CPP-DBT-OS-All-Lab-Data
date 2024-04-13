@@ -1,0 +1,35 @@
+Q.4 These questions are based on the following two tables, Employee table and Reward table.
+create table Employee ( Employee_id int, First_name varchar(50),  Last_name varchar(20), Salary BigInt, Joining_date varchar(40), Departement varchar(30);
+Employee table
++-------------+------------+-----------+----------+--------------+-------------+
+| Employee_id | First_name | Last_name | Salary | Joining_date | Departement |
++-------------+------------+-----------+----------+--------------+-------------+
+| 1 | Bob | Kinto | 1000000 | 2019-01-20 | Finance |
+| 2 | Jerry | Kansxo | 6000000 | 2019-01-15 | IT |
+| 3 | Philip | Jose | 8900000 | 2019-02-05 | Banking |
+| 4 | John | Abraham | 2000000 | 2019-02-25 | Insurance |
+| 5 | Michael | Mathew | 2200000 | 2019-02-28 | Finance |
+| 6 | Alex | chreketo | 4000000 | 2019-05-10 | IT |
+| 7 | Yohan | Soso | 1230000 | 2019-06-20 | Banking |
++-------------+------------+-----------+----------+--------------+-------------+
+Reward table
+create table Reward ( Employee_ref_id int, date_reward varchar(50), amount int(20) );
++-----------------+-------------+--------+
+| Employee_ref_id | date_reward | amount |
++-----------------+-------------+--------+
+| 1 | 2019-05-11 | 1000 |
+| 2 | 2019-02-15 | 5000 |
+| 3 | 2019-04-22 | 2000 |
+| 1 | 2019-06-20 | 8000 |
++-----------------+-------------+--------+
+1. Get all employees.
+2. Display the first name and last name of all employees.
+3. Display all the values of the “First_Name” column using the alias “Employee Name”
+4. Get all “Last_Name” in lowercase.
+5. Get all “Last_Name” in uppercase.
+6. Get unique “DEPARTMENT”.
+7. Get the first 4 characters of “FIRST_NAME” column.
+8. Get the position of the letter ‘h’ in ‘John’.
+9. Get all values from the “FIRST_NAME” column after removing white space on the right.
+10. Get all values from the “FIRST_NAME” column after removing white space on the left.
+11. Write the syntax to create the “employee” table.

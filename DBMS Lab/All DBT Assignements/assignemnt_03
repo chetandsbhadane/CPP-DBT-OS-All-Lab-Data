@@ -1,0 +1,29 @@
+create database college;
+
+create table student  
+    (
+    roll int,
+    name varchar(20),
+     class varchar(10),
+     marks float,
+     age int
+     );
+     
+ insert into student (roll,name,class,marks,age) values (1,"chetu","dac",88.90,23)
+ insert into student (roll,name,class,marks,age) values (2,"kiran","dac",90.40,34);
+ insert into student (roll,name,class,marks,age) values (3,"qwerty","dmc",56.90,45);
+ insert into student (roll,name,class,marks,age) values (4,"abc","ai",56.90,25);
+ insert into student (roll,name,class,marks,age) values (5,"xyz","dac",70.90,23);
+ 
+  select * from student;
+
+  
+delete from student where roll=4;
+
+
+ update student set marks=100.00 where roll=3;
+
+update student set marks=marks+0.5;
+
+insert into student (roll,name,class,marks,age) values (1,"chetu","dac",88.90,23),(2,"kiran","dac",90.40,34),
+(3,"qwerty","dmc",56.90,45),(4,"abc","ai",56.90,25),(5,"xyz","dac",70.90,23);

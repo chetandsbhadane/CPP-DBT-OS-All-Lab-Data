@@ -1,0 +1,128 @@
+Create a database named college
+Create a table name student in college database with following structure
+roll,name,class,marks,age with respective datatypes.
+
+create table student2 (
+	roll int,
+	name varchar(30),
+	class varchar(30),
+	marks float,
+	age int
+);
+
+Insert at least 7 entries in it.
+insert into student2 values(1,"chetan","dac",99,23),(2,"kiran","dbda",89,22),(3,"aman","dai",96,23),(4,"karan","dmc",87,22),(5,"om","dac",88,23),(6,"sai","ai",36.70,24),(7,"mai","dbda-ai",60.70,27);
+
+1) Create a procedure to pass the range of marks as input and print names of the
+students who lies in the range. (60 > 90)
+delimiter ^^
+
+create procedure get_agrade(in r1 int,in r2 int)
+begin
+select * from student where marks between r1 and r2;
+end ^^
+
+call get_agrade(60,90);
++------+--------+-------+------+-------+--------+
+| roll | name   | marks | age  | class | weight |
++------+--------+-------+------+-------+--------+
+|    4 | abc    |    67 |   24 | dac   |     60 |
+|    5 | qwerty |    90 |   40 | dmc   |     50 |
+|    6 | chetu  |    88 |   24 | dbda  |     40 |
+|    7 | chetu  |    88 |   34 | dbda  |   NULL |
++------+--------+-------+------+-------+--------+
+4 rows in set (0.00 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+
+2) Create a procedure to display the summary table of the student record
+including sum, average, minimum and maximum of marks.
+
+delimiter ^^
+mysql> create procedure dis_summary(out sum float,out avg float,out min float,out max float)
+    begin
+    create table summary select sum(marks),avg(marks),min(marks),max(marks) into sum,avg,min,max from student2;
+    end ^^
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> end ;
+    -> begin^C
+mysql> delimiter ;
+mysql> call dis_summary(@sum,@avg,@min,@max);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from summary;
++-------------------+-------------------+------------+------------+
+| sum(marks)        | avg(marks)        | min(marks) | max(marks) |
++-------------------+-------------------+------------+------------+
+| 556.4000015258789 | 79.48571450369698 |       36.7 |         99 |
++-------------------+-------------------+------------+------------+
+1 row in set (0.00 sec)
+
+create procedure dis_summary2(out sum float,out avg float,out min float,out max float)
+    begin
+    select sum(marks),avg(marks),min(marks),max(marks) into sum,avg,min,max from student2;
+    end ^^
+    
+mysql> call dis_summary2(@sum,@avg,@min,@max)^^
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select @min^^ //if delimiter is not set to ;
++-------------------+
+| @min              |
++-------------------+
+| 36.70000076293945 |
++-------------------+
+1 row in set (0.00 sec)
+
+
+4) Create a procedure to input the minimum and maximum roll number and
+output the average of the marks in the given range of roll numbers.
+create procedure get_avg(in min int,in max int, out avg float)
+begin
+select avg(marks) into avg from student2 where marks between min and max;
+end ^^
+
+call get_avg(60,80,@avg)^^
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select @avg^^
++-------------------+
+| @avg              |
++-------------------+
+| 60.70000076293945 |
++-------------------+
+1 row in set (0.00 sec)
+
+mysql> call get_avg(60,90,@avg)^^
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select @avg^^
++-------------------+
+| @avg              |
++-------------------+
+| 81.17500305175781 |
++-------------------+
+1 row in set (0.00 sec)
+
+
+5) Write a procedure to find the count of students whose marks are below 70%
+create procedure get_below(out count int)
+begin
+select count(marks) into count from student2 where marks <70;
+end ^^
+
+call get_below(@count)^^
+
+Query OK, 1 row affected (0.00 sec)
+
+select @count^^
++--------+
+| @count |
++--------+
+|      2 |
++--------+
+1 row in set (0.00 sec)
+
+

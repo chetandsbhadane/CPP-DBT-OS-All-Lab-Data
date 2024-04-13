@@ -1,0 +1,316 @@
+Q.1 Write a mysql statement to find the name, birth, department name, department block from the given tables
+
+
+create table dept 
+(
+id int primary key,
+name varchar(20),
+dept_id int,
+birth varchar(20)
+);
+
+
+| id | name | dept_id | birth |
++----+--------------+------------+------------+
+| 1 | Maria Gloria | 2 | 1994-03-12 |
+| 2 | John Smith | 1 | 1993-02-07 |
+| 3 | Gal Rao | 4 | 1992-09-11 |
+| 4 | Jakey Smith | 2 | 1990-08-31 |
+| 5 | Rama Saho | 1 | 1994-12-09 |
+| 6 | Maria Gaga | 4 | 1993-10-09
+
+insert into dept (id,name,dept_id,birth) values (1,"Maria Gloria", 2, "1994-03-12") , ( 2, "John Smith", 1, "1993-02-07"), ( 3 , "Gal Rao", 4 , "1992-09-11"), (4 ,"Jakey Smith",2, "1990-08-31"),(5,"Rama Saho",1,"1994-12-09"),(6,"Maria Gaga" ,4 ,"1993-10-09");
+
+
+
+| dept_id | dept_name | dept_block |
++---------+--------------------------+------------+
+| 1 | Computer Science | B-Block |
+| 2 | Information Technology | C-Block |
+| 3 | Mechanical | A-Block |
+| 4 | Electronic Communication | D-Block
+
+create table dept2
+(
+dept_id int primary key,
+dept_name varchar(20),
+dept_block varchar(20)
+);
+
+insert into dept2 (dept_id,dept_name,dept_block) values (1 ,"Computer Science","B-Block") , (2, "Information Technology","C-Block"), (3, "Mechanical","A-Block"), (4 ,"Electronic Communication","D-Block");
+
+SELECT name, birth, dept_name, dept_block FROM dept, dept2;
+
+
+
+
+Q2. Write a mysql statement to get name of students containing exactly five characters with ‘a’ as last lettER.
+
+mysql> create table student
+    -> (id int, name varchar(20), dept_id int, birth varchar(20));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> insert into student values(1,"Maria",2,"1994-03-12"),(2,"John",1,"1993-02-07"),(3,"Gal",4,"1992-09-11"),(4,"Jakey",2,"1990-08-31"),(5,"Rama",1,"1994-12-09"),(6,"Maria",4,"1993-10-09");
+Query OK, 6 rows affected (0.01 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select * from student;
++------+-------+---------+------------+
+| id   | name  | dept_id | birth      |
++------+-------+---------+------------+
+|    1 | Maria |       2 | 1994-03-12 |
+|    2 | John  |       1 | 1993-02-07 |
+|    3 | Gal   |       4 | 1992-09-11 |
+|    4 | Jakey |       2 | 1990-08-31 |
+|    5 | Rama  |       1 | 1994-12-09 |
+|    6 | Maria |       4 | 1993-10-09 |
++------+-------+---------+------------+
+6 rows in set (0.00 sec)
+
+mysql> select name from student where name like "____a";
++-------+
+| name  |
++-------+
+| Maria |
+| Maria |
++-------+
+
+SELECT name from student where name like "____a";
+
+
+
+
+Q3. Write a mysql statement to determine the age of each of the students
+
+
+mysql> create table student2
+    -> (id int, name varchar(20), department varchar(10), birth varchar(20));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> insert into student2 values(1,"Maria Gloria","CS","1994-03-12"),(2,"John Smith","IT","1993-02-07"),(3,"Gal Rao","CS","1992-09-11"),(4,"Jakey Smith","EC","1990-08-31"),(5,"Rama Saho","IT","1994-12-09"),(6,"Maria Gaga","EC","1993-10-09");
+Query OK, 6 rows affected (0.01 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select * from student2;
++------+--------------+------------+------------+
+| id   | name         | department | birth      |
++------+--------------+------------+------------+
+|    1 | Maria Gloria | CS         | 1994-03-12 |
+|    2 | John Smith   | IT         | 1993-02-07 |
+|    3 | Gal Rao      | CS         | 1992-09-11 |
+|    4 | Jakey Smith  | EC         | 1990-08-31 |
+|    5 | Rama Saho    | IT         | 1994-12-09 |
+|    6 | Maria Gaga   | EC         | 1993-10-09 |
++------+--------------+------------+------------+
+6 rows in set (0.00 sec)
+
+mysql> select "2024-03-23" - birth as age from dept;
++------+
+| age  |
++------+
+|   30 |
+|   31 |
+|   32 |
+|   34 |
+|   30 |
+|   31 |
++------+
+6 rows in set, 12 warnings (0.00 sec)
+
+
+
+
+
+
+Q.4 These questions are based on the following two tables, Employee table and Reward table.
+create table Employee ( Employee_id int, First_name varchar(50),  Last_name varchar(20), Salary BigInt, Joining_date varchar(40), Departement varchar(30);
+Employee table
++-------------+------------+-----------+----------+--------------+-------------+
+| Employee_id | First_name | Last_name | Salary | Joining_date | Departement |
++-------------+------------+-----------+----------+--------------+-------------+
+| 1 | Bob | Kinto | 1000000 | 2019-01-20 | Finance |
+| 2 | Jerry | Kansxo | 6000000 | 2019-01-15 | IT |
+| 3 | Philip | Jose | 8900000 | 2019-02-05 | Banking |
+| 4 | John | Abraham | 2000000 | 2019-02-25 | Insurance |
+| 5 | Michael | Mathew | 2200000 | 2019-02-28 | Finance |
+| 6 | Alex | chreketo | 4000000 | 2019-05-10 | IT |
+| 7 | Yohan | Soso | 1230000 | 2019-06-20 | Banking |
++-------------+------------+-----------+----------+--------------+-------------+
+
+insert into Employee (Employee_id,First_name,Last_name,Salary,Joining_date,Departement) values  (1,'Bob','Kinto' ,1000000 ,'2019-01-20','Finance'),
+(2 ,'Jerry' ,'Kansxo', 6000000 ,'2019-01-15','IT'),
+(3 ,'Philip', 'Jose', 8900000 ,'2019-02-05', 'Banking'),
+( 4 ,'John','Abraham', 2000000, '2019-02-25', 'Insurance'),
+(5,'Michael','Mathew',2200000 ,'2019-02-28','Finance'),
+(6,'Alex','chreketo',4000000,'2019-05-10','IT'),
+(7,'Yohan','Soso',1230000, '2019-06-20', 'Banking'); 
+
+insert into Reward (Employee_ref_id,date_reward,amount) values (1, '2019-05-11', 1000),
+(2,'2019-02-15', 5000),
+(3,'2019-04-22',2000),
+(1,'2019-06-20', 8000);
+
+
+Reward table
+create table Reward ( Employee_ref_id int, date_reward varchar(50), amount int(20) );
++-----------------+-------------+--------+
+| Employee_ref_id | date_reward | amount |
++-----------------+-------------+--------+
+| 1 | 2019-05-11 | 1000 |
+| 2 | 2019-02-15 | 5000 |
+| 3 | 2019-04-22 | 2000 |
+| 1 | 2019-06-20 | 8000 |
++-----------------+-------------+--------+
+1. Get all employees.
+ select * from Employee;
++-------------+------------+-----------+---------+--------------+-------------+
+| Employee_id | First_name | Last_name | Salary  | Joining_date | Departement |
++-------------+------------+-----------+---------+--------------+-------------+
+|           1 | Bob        | Kinto     | 1000000 | 2019-01-20   | Finance     |
+|           2 | Jerry      | Kansxo    | 6000000 | 2019-01-15   | IT          |
+|           3 | Philip     | Jose      | 8900000 | 2019-02-05   | Banking     |
+|           4 | John       | Abraham   | 2000000 | 2019-02-25   | Insurance   |
+|           5 | Michael    | Mathew    | 2200000 | 2019-02-28   | Finance     |
+|           6 | Alex       | chreketo  | 4000000 | 2019-05-10   | IT          |
+|           7 | Yohan      | Soso      | 1230000 | 2019-06-20   | Banking     |
++-------------+------------+-----------+---------+--------------+-------------+
+7 rows in set (0.00 sec)
+
+
+2. Display the first name and last name of all employees
+select First_name,Last_name from Employee;
++------------+-----------+
+| First_name | Last_name |
++------------+-----------+
+| Bob        | Kinto     |
+| Jerry      | Kansxo    |
+| Philip     | Jose      |
+| John       | Abraham   |
+| Michael    | Mathew    |
+| Alex       | chreketo  |
+| Yohan      | Soso      |
++------------+-----------+
+7 rows in set (0.00 sec)
+
+
+3. Display all the values of the “First_Name” column using the alias “Employee Name”
+
+select First_name as Employee_name from Employee;
++---------------+
+| Employee_name |
++---------------+
+| Bob           |
+| Jerry         |
+| Philip        |
+| John          |
+| Michael       |
+| Alex          |
+| Yohan         |
++---------------+
+7 rows in set (0.00 sec)
+
+
+4. Get all “Last_Name” in lowercase.
+5. Get all “Last_Name” in uppercase.
+
+ select LOWER(Last_name) from Employee;
++------------------+
+| LOWER(Last_name) |
++------------------+
+| kinto            |
+| kansxo           |
+| jose             |
+| abraham          |
+| mathew           |
+| chreketo         |
+| soso             |
++------------------+
+7 rows in set (0.00 sec)
+
+mysql> select Upper(Last_name) from Employee;
++------------------+
+| Upper(Last_name) |
++------------------+
+| KINTO            |
+| KANSXO           |
+| JOSE             |
+| ABRAHAM          |
+| MATHEW           |
+| CHREKETO         |
+| SOSO             |
++------------------+
+7 rows in set (0.00 sec)
+
+
+6. Get unique “DEPARTMENT”.
+
+select distinct Departement from Employee; 
++-------------+
+| Departement |
++-------------+
+| Finance     |
+| IT          |
+| Banking     |
+| Insurance   |
++-------------+
+
+
+7. Get the first 4 characters of “FIRST_NAME” column.
+select substring(FIRST_NAME, 1,4) from Employee;
++----------------------------+
+| substring(FIRST_NAME, 1,4) |
++----------------------------+
+| Bob                        |
+| Jerr                       |
+| Phil                       |
+| John                       |
+| Mich                       |
+| Alex                       |
+| Yoha                       |
++----------------------------+
+7 rows in set (0.00 sec)
+
+8. Get the position of the letter ‘h’ in ‘John’.
+SELECT POSITION("h" IN first_name) FROM Employee WHERE first_name = "John";
++-----------------------------+
+| POSITION("h" IN first_name) |
++-----------------------------+
+|                           3 |
++-----------------------------+
+1 row in set (0.00 sec)
+
+
+9. Get all values from the “FIRST_NAME” column after removing white space on the right.
+SELECT LTRIM(first_name) from Employee;
++-------------------+
+| LTRIM(first_name) |
++-------------------+
+| Bob               |
+| Jerry             |
+| Philip            |
+| John              |
+| Michael           |
+| Alex              |
+| Yohan             |
++-------------------+
+7 rows in set (0.00 sec)
+
+
+10. Get all values from the “FIRST_NAME” column after removing white space on the left.
+SELECT RTRIM(first_name) from Employee;
++-------------------+
+| RTRIM(first_name) |
++-------------------+
+| Bob               |
+| Jerry             |
+| Philip            |
+| John              |
+| Michael           |
+| Alex              |
+| Yohan             |
++-------------------+
+7 rows in set (0.00 sec)
+
+
+11. Write the syntax to create the “employee” table.
+create table Employee ( Employee_id int, First_name varchar(50),  Last_name varchar(20), Salary BigInt, Joining_date varchar(40), Departement varchar(30);

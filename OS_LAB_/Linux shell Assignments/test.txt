@@ -1,0 +1,3 @@
+rno: 12
+name : yuvi
+marks : 100

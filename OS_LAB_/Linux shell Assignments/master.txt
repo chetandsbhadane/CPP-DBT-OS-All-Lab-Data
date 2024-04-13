@@ -1,0 +1,4 @@
+bCode : 1
+fcName : "Rao"
+stdNo : 60
+

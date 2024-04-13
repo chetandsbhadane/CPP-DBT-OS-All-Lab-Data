@@ -1,0 +1,3 @@
+rollNo name m_hindi m_maths m_phy
+1 chetu 70 50 90
+2 kiran 50 70 60

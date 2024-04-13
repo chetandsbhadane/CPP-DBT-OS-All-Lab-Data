@@ -1,0 +1,31 @@
+show databases;
+
+create database college; //done
+
+desc college; //done
+
+use college; //done
+
+create table student  //done
+    (
+    roll int,
+    name varchar(20),
+     class varchar(10),
+     marks float,
+     age int
+     );
+    
+   
+alter table student modify column marks int; //done
+
+desc student; //done
+
+alter table student drop column age; //done
+
+select database() //done
+
+truncate table student; //done
+
+drop table student; //done
+
+drop database college; //done
