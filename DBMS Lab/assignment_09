@@ -1,0 +1,217 @@
+create a database named college
+create database college;
+
+use college;
+
+create a table name student in college db with following structure
+roll,name, class,marks,age with respective datatypes
+
+create table student (
+     roll int,
+     name varchar(50),
+     class varchar(50),
+     marks float,
+     age int
+     );
+Query OK, 0 rows affected (0.03 sec)
+
+
+insert at least 7 entries in it..
+insert into student values(1,"chetan","dac",80.50,24),(2,"kiran","dac",85.50,25),(3,"aman","dbda",77.20,22),(4,"amey","ai",82.40,24),(5,"lokesh","maksad",36.00,30),(6,"badri","dbda",50.20,28),(7,"badri","dac",66.50,26);
+insert into student values(1,"chetan","dac",80.50,24),(2,"kiran","dac",85.50,25),(3,"aman","dbda",77.20,22),(4,"amey","ai",82.40,24),(5,"lokesh","maksad",36.00,30),(6,"badri","dbda",50.20,28),(7,"badri","dac",66.50,26);
+Query OK, 7 rows affected (0.00 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> select * from student;
++------+--------+--------+-------+------+
+| roll | name   | class  | marks | age  |
++------+--------+--------+-------+------+
+|    1 | chetan | dac    |  80.5 |   24 |
+|    2 | kiran  | dac    |  85.5 |   25 |
+|    3 | aman   | dbda   |  77.2 |   22 |
+|    4 | amey   | ai     |  82.4 |   24 |
+|    5 | lokesh | maksad |    36 |   30 |
+|    6 | badri  | dbda   |  50.2 |   28 |
+|    7 | badri  | dac    |  66.5 |   26 |
++------+--------+--------+-------+------+
+7 rows in set (0.00 sec)
+
+============================================================================================================
+
+1. create a new colm which states that where the students got first class or not?
+
+select roll,name,marks, if(marks > 70,'first class','not') as first_class from student;
++------+--------+-------+-------------+
+| roll | name   | marks | first_class |
++------+--------+-------+-------------+
+|    1 | chetan |  80.5 | first class |
+|    2 | kiran  |  85.5 | first class |
+|    3 | aman   |  77.2 | first class |
+|    4 | amey   |  82.4 | first class |
+|    5 | lokesh |    36 | not         |
+|    6 | badri  |  50.2 | not         |
+|    7 | badri  |  66.5 | not         |
++------+--------+-------+-------------+
+7 rows in set (0.00 sec)
+
+==============================================================================================================
+
+2. create a new column which states that grade of the students;
+>75 = A+ grade
+>60 = a Grade
+>55 = b+ grade
+>50 = b grade
+>40 = c grade
+<40 = d grade
+
+SELECT name, marks, 
+(CASE WHEN marks IS NULL THEN 'NA' 
+  WHEN marks > 70 THEN 'A+' 
+  WHEN marks > 60 THEN 'A' 
+  WHEN marks > 55 THEN 'B+' 
+  WHEn marks > 50 THEN 'B'
+  WHEN marks > 40 THEN 'C'
+  ELSE 'D' END) AS grade
+FROM student;
+
++--------+-------+-------+
+| name   | marks | grade |
++--------+-------+-------+
+| chetan |  80.5 | A+    |
+| kiran  |  85.5 | A+    |
+| aman   |  77.2 | A+    |
+| amey   |  82.4 | A+    |
+| lokesh |    36 | D     |
+| badri  |  50.2 | B     |
+| badri  |  66.5 | A     |
++--------+-------+-------+
+7 rows in set (0.00 sec)
+
+===============================================================================================================
+
+3. Create a procedure to find addition of first 10 natural numbers.
+CREATE PROCEDURE sum_numbers()
+BEGIN
+  DECLARE sum INT DEFAULT 0;
+  DECLARE counter INT DEFAULT 1;
+  
+  WHILE counter <= 10 DO
+    SET sum = sum + counter;
+    SET counter = counter + 1;
+  END WHILE;
+  
+  SELECT sum; /* Display the sum */
+END &&;
+
+call sum_numbers();
++------+
+| sum  |
++------+
+|   55 |
++------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+===============================================================================================================
+
+4. Create a procedure to enter a parameter and check where that is even number or odd number or neither of them
+
+delimiter &&;
+CREATE PROCEDURE even_odd_check(in num int,out res varchar(20))
+BEGIN
+  if(num=0) then
+     set res="Even no";
+  elseif(num%2=0) then
+     set res="neither of them";
+  else
+     set res="odd no";
+  end if;
+  select res;
+end &&;
+
+
+delimiter ;
+mysql> set @res='';
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call even_odd_check(11,@res);
++--------+
+| res    |
++--------+
+| odd no |
++--------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call even_odd_check(0,@res);
++---------+
+| res     |
++---------+
+| Even no |
++---------+
+1 row in set (0.00 sec)
+
+==============================================================================================================
+
+5. create a new column which states that grade of the students;
+>75 = A+ grade
+>60 = a Grade
+>55 = b+ grade
+>50 = b grade
+>40 = c grade
+<40 = d grade
+
+delimiter &&;
+CREATE PROCEDURE check_grade(in marks int,out res varchar(20))
+BEGIN
+  if(marks > 70) then
+     set res="A+";
+  elseif(marks > 60) then
+     set res="A+";
+  elseif(marks > 55) then
+     set res="B+";
+  elseif(marks > 50) then
+     set res="B";
+  elseif(marks > 40) then
+     set res="C";
+  else
+     set res="D";
+  end if;
+  select res;
+end &&;
+
+set @res='';
+call check_grade(40,@res);
++------+
+| res  |
++------+
+| D    |
++------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call check_grade(33,@res);
++------+
+| res  |
++------+
+| D    |
++------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call check_grade(45,@res);
++------+
+| res  |
++------+
+| C    |
++------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+		
