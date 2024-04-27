@@ -1,0 +1,108 @@
+Problem-1
+Create a product table with following attributes in it.
+Product ID, Product type, Name and cost
+Insert at least 8 tuples in it.
+Write a function to find the final cost of the product based on following conditions.
+1. If type = Furniture then gst = 12%
+2. If type = Electronics then gst = 18%
+3. If type = Stationary then gst = 6%
+4. Zero otherwise
+
+create table product (
+	prodId int,
+	prodtype varchar(20),
+	prodName varchar(20),
+	prodCost float
+);
+
+insert into product values(1,"Fur","SOFA",40000.0),(2,"Fur","Chair",1000.0),(3,"ELE","TV",50000.0),(4,"ELE","AC",20000.0),(5,"STA","Notebook",60.0),(6,"STA","Pen",20.0),(7,"Fur","Kingbed",10000.0),(8,"ELE","FRidge",25000.0);
+
+delimiter &&
+create function cal_finalcost(type varchar(10), cost float)
+returns float
+deterministic
+begin
+	declare final_cost float default 0.0;
+	if(type='ELE') then
+	   set final_cost = cost * 0.18 + cost;
+	elseif(type='Fur') then
+	   set final_cost = cost * 0.12 + cost;
+	else
+	   set final_cost = cost * 0.06 + cost;
+	end if;
+	return final_cost;
+end &&
+delimiter ;   
+
+select prodName,cal_finalcost(prodType,prodCost) from product;
++----------+----------------------------------+
+| prodName | cal_finalcost(prodType,prodCost) |
++----------+----------------------------------+
+| SOFA     |                            44800 |
+| Chair    |                             1120 |
+| TV       |                            59000 |
+| AC       |                            23600 |
+| Notebook |                             63.6 |
+| Pen      |                             21.2 |
+| Kingbed  |                            11200 |
+| FRidge   |                            29500 |
++----------+----------------------------------+
+8 rows in set (0.00 sec)
+
+
+
+
+Create a employees table with following attributes in it.
+Employee id, Employee name, Salary, Department, Age, Experience
+Insert at least 8 tuples in it.
+Write a function to find the gross salary of the employee based on the below
+conditions:
+1. If experience is less than 3 then no DA/HRA given.
+2. If experience is greater than or equal to 3 and less than 8 then no DA=30% of
+salary and HRA is 5% of Salary.
+3. If experience is greater than or equal to 8 then no DA=50% of salary and HRA is
+5% of Salary.
+
+
+create table employees (
+	empId int,
+	empName varchar(20),
+	empSal float,
+	empDep varchar(20),
+	empage int,
+	empExp int
+);
+
+insert into employees values(1,"chetan",50000.0,"HR",25,5),(2,"amey",30000.0,"HR",24,2),(3,"kiran",6000.0,"LEAD",26,4),(4,"makasad",70000.0,"MAN",30,12),(5,"kunal",150000.0,"HR",25,9),(6,"jethalal",350000.0,"MANAGER",55,20);
+
+delimiter &&
+create function gross_sal(sal float, exp int)
+returns float
+deterministic
+begin
+	declare final_sal float default 0.0;
+	if(exp > 3 and exp < 8) then
+	   set final_sal = sal * 0.30 + sal * 0.05  + sal;
+	elseif(exp > 8) then
+	    set final_sal = sal * 0.50 + sal * 0.05 + sal;
+	else
+	   set final_sal = sal;
+	end if;
+	return final_sal;
+end &&
+delimiter ; 
+
+select empName,empexp,gross_sal(empsal,empexp) from employees;
++----------+--------+--------------------------+
+| empName  | empexp | gross_sal(empsal,empexp) |
++----------+--------+--------------------------+
+| chetan   |      5 |                    67500 |
+| amey     |      2 |                    30000 |
+| kiran    |      4 |                     8100 |
+| makasad  |     12 |                   108500 |
+| kunal    |      9 |                   232500 |
+| jethalal |     20 |                   542500 |
++----------+--------+--------------------------+
+6 rows in set (0.00 sec)
+
+	   
