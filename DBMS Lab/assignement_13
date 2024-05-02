@@ -1,0 +1,126 @@
+Create a table product as below:
++------+------------+-------+
+| type | name | cost |
++------+------------+-------+
+| FUR | Chair | 1500 |
+| FUR | Cupboard | 15000 |
+| ELE | Mobile | 25000 |
+| FUR | Table | 6500 |
+| ELE | Television | 18500 |
+| STA | Notebook | 45 |
+| STA | Stapler | 40 |
++------+------------+-------
+
+create table product (
+	type varchar(10),
+	name varchar(30),
+	cost int
+);
+
+insert into product values("FUR","Chair",1500),("FUR","Cupboard",15000),("ELE","Mobile",25000),("FUR","Table", 6500),("ELE","Television",18500),("STA","Notebook",45),("STA","Stapler",40);
+	
+	
+Create following triggers:
+1. If the data entry has made for a negative cost then make is positive and insert
+it.
+
+delimiter &&
+create trigger before_insert_neg_to_pos
+before insert on product for each row 
+begin
+	if(new.cost < 0)
+	then
+	   set new.cost= new.cost * -1;
+	end if;
+end &&
+delimiter ;
+
+insert into product values("FUR", "Sofa", -200000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from product;
++------+------------+--------+
+| type | name       | cost   |
++------+------------+--------+
+| FUR  | Chair      |   1500 |
+| FUR  | Cupboard   |  15000 |
+| ELE  | Mobile     |  25000 |
+| FUR  | Table      |   6500 |
+| ELE  | Television |  18500 |
+| STA  | Notebook   |     45 |
+| STA  | Stapler    |     40 |
+| FUR  | Sofa       | 200000 |
++------+------------+--------+
+8 rows in set (0.00 sec)
+
+
+
+2. Make a backup of the data every time user enters new information in the
+table.
+
+create table backup (
+
+delimiter &&
+create trigger insert_backup
+after insert on product for each row
+begin
+	insert into backup values(new.type,new.name,new.cost);
+end &&
+delimiter ;
+
+
+3. Create a log file when user makes the changes in the cost of the product,
+record it.
+
+delimiter &&
+CREATE TRIGGER product_cost_update_trigger
+AFTER UPDATE ON product
+FOR EACH ROW
+BEGIN
+  DECLARE old_cost DECIMAL(10,2);
+  DECLARE new_cost DECIMAL(10,2);
+
+  SET old_cost = OLD.cost;
+  SET new_cost = NEW.cost;
+
+  INSERT INTO product_cost_history (old_cost, new_cost, timestamp)
+  VALUES (old_cost, new_cost, CURRENT_TIMESTAMP);
+END &&
+delimiter ;
+
+CREATE TABLE product_cost_history (
+  old_cost DECIMAL(10,2) NOT NULL,
+  new_cost DECIMAL(10,2) NOT NULL,
+  timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+update product set cost=4000 where type="FUR";
+Query OK, 5 rows affected (0.01 sec)
+Rows matched: 5  Changed: 5  Warnings: 0
+
+mysql> select * from product_cost_history;
++-----------+----------+---------------------+
+| old_cost  | new_cost | timestamp           |
++-----------+----------+---------------------+
+|   1500.00 |  4000.00 | 2024-05-02 20:57:51 |
+|  15000.00 |  4000.00 | 2024-05-02 20:57:51 |
+|   6500.00 |  4000.00 | 2024-05-02 20:57:51 |
+| 200000.00 |  4000.00 | 2024-05-02 20:57:51 |
+|   1400.00 |  4000.00 | 2024-05-02 20:57:51 |
++-----------+----------+---------------------+
+5 rows in set (0.00 sec)
+
+
+After deleting any entry from table, create a variable that contains the type of
+product which has recently deleted
+
+delimiter &&
+create trigger delete_entry
+after delete on product for each row
+begin
+	set @var=concat('You entered entry of roll no', old.type);
+	insert into delete_his var values(var);
+end &&
+delimiter ;
+
+
