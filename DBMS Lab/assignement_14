@@ -1,0 +1,159 @@
+Create the MongoDB collection as mentioned above.
+
+db.movie.insert({"refno":1001,"name":Python,"author":shyam,"co"})
+
+Select the database to use.
+use('mydb');
+
+ Insert a few documents into the sales collection.
+ db.getCollection('Books').insertMany([
+   { 'refno': 1001 , 'name':  "Python", 'author': "Shyam",  'coauthor' : "Rakesh" , 'pages': 350, "price": 450},
+   { 'refno': 1002 , 'name': "Java" , 'author': "Amita",  'coauthor' : ""  , 'pages': 300, "price": 500},
+   { 'refno': 1003 , 'name': "Html" , 'author': "Amita",  'coauthor' : "Shyam"  , 'pages': 225, "price": 300},
+   { 'refno': 1004 , 'name': "Mongodb", 'author':  "Shyam",  'coauthor' : "" , 'pages': 440, "price": 500},
+   { 'refno': 1005 , 'name': "Mysql"  , 'author': "shrikant",  'coauthor' : "Nitin" , 'pages': 330, "price": 630}
+ ]);
+
+1. Count how many books wrote by Amita.
+db.Books.count({"author": "Amita"});
+OUTPUT - 2
+
+
+2. Count total books written by Shyam.
+db.Books.count({"author": "Shyam"})
+OUTPUT - 2
+
+
+3. How many author's books are available in library?
+ db.Books.aggregate([
+     { $group: { _id: "$author", count: { $sum: 1 } } }
+   ])
+OUTPUT - 
+[
+  {
+    "_id": "Amita",
+    "count": 2
+  },
+  {
+    "_id": "shrikant",
+    "count": 1
+  },
+  {
+    "_id": "Shyam",
+    "count": 2
+  }
+]
+
+
+4. Find average cost of books in library.
+ db.Books.aggregate([
+   { $group: { _id: null, averagePrice: { $avg: "$price" } } }
+ ])
+OUTPUT -
+ [
+  {
+    "_id": null,
+    "averagePrice": 476
+  }
+]
+
+
+5. Find total number of pages of books authored by Shyam.
+ db.Books.aggregate([
+   { $match: { author: "Shyam" } },
+   { $group: { _id: "$author", totalPages: { $sum: "$pages" } } }
+ ])
+OUTPUT -
+[
+  {
+    "_id": "Shyam",
+    "totalPages": 790
+  }
+]
+
+6. Sort the books by descending order of pages.
+db.Books.find().sort({ pages: -1 })
+[
+  {
+    "_id": {
+      "$oid": "6632a27f810357b8d2407e1c"
+    },
+    "refno": 1014,
+    "name": "Mongodb",
+    "author": "Shyam",
+    "coauthor": "",
+    "pages": 440,
+    "price": 500
+  },
+  {
+    "_id": {
+      "$oid": "6632a27f810357b8d2407e19"
+    },
+    "refno": 1001,
+    "name": "Python",
+    "author": "Shyam",
+    "coauthor": "Rakesh",
+    "pages": 350,
+    "price": 450
+  },
+  {
+    "_id": {
+      "$oid": "6632a2dcc07c3d807f9be02e"
+    },
+    "refno": 1005,
+    "name": "Mysql",
+    "author": "shrikant",
+    "coauthor": "",
+    "pages": 330,
+    "price": 630
+  },
+  {
+    "_id": {
+      "$oid": "6632a27f810357b8d2407e1a"
+    },
+    "refno": 1002,
+    "name": "Java",
+    "author": "Amita",
+    "coauthor": "",
+    "pages": 300,
+    "price": 500
+  },
+  {
+    "_id": {
+      "$oid": "6632a27f810357b8d2407e1b"
+    },
+    "refno": 1003,
+    "name": "Html",
+    "author": "Amita",
+    "coauthor": "Shyam",
+    "pages": 225,
+    "price": 300
+  }
+]
+
+
+7. Change the id of book 'MongoDB' to 1014.
+db.Books.updateOne({ name: "Mongodb" }, { $set: { refno: 1014 } })
+{
+  "acknowledged": true,
+  "insertedId": null,
+  "matchedCount": 1,
+  "modifiedCount": 0,
+  "upsertedCount": 0
+}
+
+
+8. Find total books whose cost is above 400.
+db.Books.count({ price: { $gt: 400 } })
+4
+
+
+9. Delete the co-author of book 'MySQL'.
+db.Books.updateOne({ name: "Mysql" }, { $set: { coauthor: "" } })
+{
+  "acknowledged": true,
+  "insertedId": null,
+  "matchedCount": 1,
+  "modifiedCount": 0,
+  "upsertedCount": 0
+}

@@ -1,0 +1,74 @@
+Create a table employees as below:
++------+--------+------------+--------+
+| eid | name | experience | salary |
++------+--------+------------+--------+
+| 101 | Vijay | 12 | 56000 |
+| 103 | Rani | 0 | 14000 |
+| 104 | Ramesh | 6 | 45000 |
+| 105 | Anil | 5 | 34600 |
+| 107 | Akash | 14 | 67800 |
+| 108 | Priya | 7 | 60000 |
++------+--------+------------+--------+
+Create a cursor to copy the data from this table to another table named emp with
+contains eid, name and salary only. The salary copied should be like 56K, 14K, 45K
+34K onwards. The names on employees copied should be in upper case only
+
+1.
+create table emp (
+	eid int,
+	name varchar(20),
+	exp int,
+	sal int
+);
+
+insert into emp values(101,"Vijay",12,56000),(103,"Rani",0,14000),(104,"Ramesh",6,45000),
+(105,"Anil",5,34600),
+(107,"Akash",14,67800),
+(108,"Priya",7,60000);
+
+delimiter &&
+create procedure cursor_emp()
+BEGIN
+
+	DECLARE eid1 INT;
+	DECLARE name1 VARCHAR(255);
+	DECLARE sal1 VARCHAR(10);
+	declare done int default 0;
+	DECLARE cur1 CURSOR FOR SELECT eid,name,sal FROM emp;
+	declare continue handler for not found set done = 1;
+
+  OPEN cur1;
+  
+  label:loop
+  	fetch cur1 into eid1,name1,sal1;
+  	insert into emp2 values(eid1,upper(name1),concat(round(sal1/1000),"k"));
+  	if done=1 then leave label;
+  	end if;
+  	end loop;	
+  CLOSE cur1;
+END &&
+delimiter ;
+
+call cursor_emp();
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from emp2;
++------+--------+--------+
+| eid  | name   | salary |
++------+--------+--------+
+|  101 | VIJAY  | 56k    |
+|  103 | RANI   | 14k    |
+|  104 | RAMESH | 45k    |
+|  105 | ANIL   | 35k    |
+|  107 | AKASH  | 68k    |
+|  108 | PRIYA  | 60k    |
+|  108 | PRIYA  | 60k    |
++------+--------+--------+
+7 rows in set (0.00 sec)
+
+
+
+
+
+
+
