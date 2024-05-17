@@ -1,0 +1,318 @@
+....................ALL QUERIES, TABLES, OUTPUTS HERE...........................
+
+
+
+Q1. CREATE BELOW TWO TABLES IN ANY DATABASE. DEPT, EMP
+
+create table dept (
+	Deptno int,
+	Dname varchar(20),
+	Loc varchar(30)
+);
+
+insert into dept values(10,"Accounting","New york"),(20,"Research","Dallas"),(30,"Sales","Chicago"),(40,"Operations","Boston");
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+create table emp(
+	Empno int,
+	Ename varchar(20),
+	Job varchar(20),
+	Mgr int,
+	Hiredate varchar(30),
+	Sal int,
+	Comm int,
+	Deptno int
+);
+
+insert into emp values(7839,"King","President",null,"17-11-1981",5000,null,10),
+                      (7698,"Blake","Manager","7839","1-5-1981",2800,null,30),
+                      (7782,"Clerk","Manager","7839","9-6-1981",2450,null,10),
+                      (7566,"Jones","Manager","7839","2-4-1981",2975,null,20),
+                      (7788,"Scott","Analyst","7566","13-7-1987",3000,null,20),
+                      (7902,"Ford","Analyst","7566","3-12-1981",3000,null,20),
+                      (7369,"Smith","Clerk","7902","17-12-1980",800,null,20),
+                      (7499,"Allen","Salesman","7698","20-2-1981",1600,300,30),
+                      (7521,"Ward","Salesman","7698","22-2-1984",1250,500,30),
+                      (7654,"Martin","Salesman","7698","28-9-1982",1250,"1400",30),
+                      (7844,"Turner","Salesman","7698","8-9-1981",1500,0,30),
+                      (7876,"Adams","Clerk","7788","17-7-1983",1100,null,20),
+                      (7900,"James","Clerk","7698","3-12-1981",950,null,30),
+                      (7934,"Miller","Clerk","7782","23-1-1982",1300,null,10);
+                      
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------           
+                                     
+1. Write a sql query to fetch empId, emp name, department loc, department name whose salary is greater than that of jones pr salary is greater than that of scott
+
+SELECT e.Empno AS empId, e.Ename AS empName, d.Loc AS departmentLoc, d.Dname AS departmentName
+FROM emp e
+JOIN dept d ON e.Deptno = d.Deptno
+WHERE e.Sal > (SELECT Sal FROM emp WHERE Ename = 'Jones')
+AND e.Sal > (SELECT Sal FROM emp WHERE Ename = 'Scott');
+
++-------+---------+---------------+----------------+
+| empId | empName | departmentLoc | departmentName |
++-------+---------+---------------+----------------+
+|  7839 | King    | New york      | Accounting     |
++-------+---------+---------------+----------------+
+1 row in set (0.00 sec)
+
+===============================================================================================================================================================================
+
+2. Write a sql query to fetch id,empname, deparmentname, salary and deparment whose deparment is clerk or salesman
+
+SELECT e.Empno AS id, e.Ename AS empname, d.Dname AS deparmentname, e.Sal AS salary, e.Job AS deparment
+FROM emp e
+JOIN dept d ON e.Deptno = d.Deptno
+WHERE e.Job IN ('Clerk', 'Salesman');
+
++------+---------+---------------+--------+-----------+
+| id   | empname | deparmentname | salary | deparment |
++------+---------+---------------+--------+-----------+
+| 7934 | Miller  | Accounting    |   1300 | Clerk     |
+| 7876 | Adams   | Research      |   1100 | Clerk     |
+| 7369 | Smith   | Research      |    800 | Clerk     |
+| 7900 | James   | Sales         |    950 | Clerk     |
+| 7844 | Turner  | Sales         |   1500 | Salesman  |
+| 7654 | Martin  | Sales         |   1250 | Salesman  |
+| 7521 | Ward    | Sales         |   1250 | Salesman  |
+| 7499 | Allen   | Sales         |   1600 | Salesman  |
++------+---------+---------------+--------+-----------+
+8 rows in set (0.00 sec)
+
+================================================================================================================================================================================
+
+3. write a sql query to fetch all emp info who are working in accounting deparment
+
+SELECT *
+FROM emp
+WHERE Deptno = (SELECT Deptno FROM dept WHERE Dname = 'Accounting');
+
++-------+--------+-----------+------+------------+------+------+--------+
+| Empno | Ename  | Job       | Mgr  | Hiredate   | Sal  | Comm | Deptno |
++-------+--------+-----------+------+------------+------+------+--------+
+|  7839 | King   | President | NULL | 17-11-1981 | 5000 | NULL |     10 |
+|  7782 | Clerk  | Manager   | 7839 | 9-6-1981   | 2450 | NULL |     10 |
+|  7934 | Miller | Clerk     | 7782 | 23-1-1982  | 1300 | NULL |     10 |
++-------+--------+-----------+------+------------+------+------+--------+
+3 rows in set (0.01 sec)
+
+=================================================================================================================================================================================
+
+4. write a sql query to display upper case emp name, lowercase department name, and display the number of characters in emp name
+
+SELECT UPPER(emp.Ename) AS Ename, LOWER(dept.Dname) AS dept_name, LENGTH(emp.Ename) AS name_length
+FROM emp
+JOIN dept ON emp.deptno = dept.deptno;
+
++--------+------------+-------------+
+| Ename  | dept_name  | name_length |
++--------+------------+-------------+
+| KING   | accounting |           4 |
+| BLAKE  | sales      |           5 |
+| CLERK  | accounting |           5 |
+| JONES  | research   |           5 |
+| SCOTT  | research   |           5 |
+| FORD   | research   |           4 |
+| SMITH  | research   |           5 |
+| ALLEN  | sales      |           5 |
+| WARD   | sales      |           4 |
+| MARTIN | sales      |           6 |
+| TURNER | sales      |           6 |
+| ADAMS  | research   |           5 |
+| JAMES  | sales      |           5 |
+| MILLER | accounting |           6 |
++--------+------------+-------------+
+14 rows in set (0.00 sec)
+
+=================================================================================================================================================================================
+
+5. write a sql query to display all information from emp table where job manager is found it should be display as boss.
+
+SELECT Empno AS id, Ename AS name, Job AS position, Mgr AS manager_id, Hiredate AS hire_date, Sal AS salary, Comm AS commission,
+CASE WHEN Job = 'Manager' THEN 'boss' ELSE Job END AS job
+FROM emp;
+
++------+--------+-----------+------------+------------+--------+------------+-----------+
+| id   | name   | position  | manager_id | hire_date  | salary | commission | job       |
++------+--------+-----------+------------+------------+--------+------------+-----------+
+| 7839 | King   | President |       NULL | 17-11-1981 |   5000 |       NULL | President |
+| 7698 | Blake  | Manager   |       7839 | 1-5-1981   |   2800 |       NULL | boss      |
+| 7782 | Clerk  | Manager   |       7839 | 9-6-1981   |   2450 |       NULL | boss      |
+| 7566 | Jones  | Manager   |       7839 | 2-4-1981   |   2975 |       NULL | boss      |
+| 7788 | Scott  | Analyst   |       7566 | 13-7-1987  |   3000 |       NULL | Analyst   |
+| 7902 | Ford   | Analyst   |       7566 | 3-12-1981  |   3000 |       NULL | Analyst   |
+| 7369 | Smith  | Clerk     |       7902 | 17-12-1980 |    800 |       NULL | Clerk     |
+| 7499 | Allen  | Salesman  |       7698 | 20-2-1981  |   1600 |        300 | Salesman  |
+| 7521 | Ward   | Salesman  |       7698 | 22-2-1984  |   1250 |        500 | Salesman  |
+| 7654 | Martin | Salesman  |       7698 | 28-9-1982  |   1250 |       1400 | Salesman  |
+| 7844 | Turner | Salesman  |       7698 | 8-9-1981   |   1500 |          0 | Salesman  |
+| 7876 | Adams  | Clerk     |       7788 | 17-7-1983  |   1100 |       NULL | Clerk     |
+| 7900 | James  | Clerk     |       7698 | 3-12-1981  |    950 |       NULL | Clerk     |
+| 7934 | Miller | Clerk     |       7782 | 23-1-1982  |   1300 |       NULL | Clerk     |
++------+--------+-----------+------------+------------+--------+------------+-----------+
+14 rows in set (0.00 sec)
+
+===============================================================================================================================================================================
+
+Q2. 
+
+1 write a query to display emp name, locationname, department name of employees work in company.
+SELECT e.Ename AS emp_name, d.Loc AS location_name, d.Dname AS dept_name
+FROM emp e
+JOIN dept d ON e.Deptno = d.Deptno;
+
++----------+---------------+------------+
+| emp_name | location_name | dept_name  |
++----------+---------------+------------+
+| King     | New york      | Accounting |
+| Blake    | Chicago       | Sales      |
+| Clerk    | New york      | Accounting |
+| Jones    | Dallas        | Research   |
+| Scott    | Dallas        | Research   |
+| Ford     | Dallas        | Research   |
+| Smith    | Dallas        | Research   |
+| Allen    | Chicago       | Sales      |
+| Ward     | Chicago       | Sales      |
+| Martin   | Chicago       | Sales      |
+| Turner   | Chicago       | Sales      |
+| Adams    | Dallas        | Research   |
+| James    | Chicago       | Sales      |
+| Miller   | New york      | Accounting |
++----------+---------------+------------+
+14 rows in set (0.00 sec)
+
+=================================================================================================================================================================================
+
+2. write a query to display all various job and total salary for each job.
+
+SELECT Job, SUM(Sal) AS TotalSalary
+FROM emp
+GROUP BY Job;
+
++-----------+-------------+
+| Job       | TotalSalary |
++-----------+-------------+
+| President |        5000 |
+| Manager   |        8225 |
+| Analyst   |        6000 |
+| Clerk     |        4150 |
+| Salesman  |        5600 |
++-----------+-------------+
+5 rows in set (0.00 sec)
+
+=================================================================================================================================================================================
+
+
+3. write a query to dsiplay department number and department name with having more than three employees in each department.
+
+SELECT Deptno, Dname
+FROM dept
+WHERE Deptno IN (
+    SELECT Deptno
+    FROM emp
+    GROUP BY Deptno
+    HAVING COUNT(*) > 3
+);
+
++--------+----------+
+| Deptno | Dname    |
++--------+----------+
+|     20 | Research |
+|     30 | Sales    |
++--------+----------+
+2 rows in set (0.00 sec)
+
+=================================================================================================================================================================================
+
+4. write a query to display information of employee who do not have any person working under them.
+
+SELECT *
+FROM emp e1
+WHERE e1.Mgr IS NULL
+OR NOT EXISTS (
+    SELECT *
+    FROM emp e2
+    WHERE e2.Mgr = e1.Empno
+);
+
++-------+--------+-----------+------+------------+------+------+--------+
+| Empno | Ename  | Job       | Mgr  | Hiredate   | Sal  | Comm | Deptno |
++-------+--------+-----------+------+------------+------+------+--------+
+|  7839 | King   | President | NULL | 17-11-1981 | 5000 | NULL |     10 |
+|  7369 | Smith  | Clerk     | 7902 | 17-12-1980 |  800 | NULL |     20 |
+|  7499 | Allen  | Salesman  | 7698 | 20-2-1981  | 1600 |  300 |     30 |
+|  7521 | Ward   | Salesman  | 7698 | 22-2-1984  | 1250 |  500 |     30 |
+|  7654 | Martin | Salesman  | 7698 | 28-9-1982  | 1250 | 1400 |     30 |
+|  7844 | Turner | Salesman  | 7698 | 8-9-1981   | 1500 |    0 |     30 |
+|  7876 | Adams  | Clerk     | 7788 | 17-7-1983  | 1100 | NULL |     20 |
+|  7900 | James  | Clerk     | 7698 | 3-12-1981  |  950 | NULL |     30 |
+|  7934 | Miller | Clerk     | 7782 | 23-1-1982  | 1300 | NULL |     10 |
++-------+--------+-----------+------+------------+------+------+--------+
+9 rows in set (0.01 sec)
+
+==================================================================================================================================================================================
+
+
+Q3.
+create a PL-SQL function which will accept the emp number as input and it will return dept name of that employee wotking in that company.
+
+delimiter &&
+CREATE OR REPLACE FUNCTION get_dept_name(p_empno IN emp.Empno%TYPE)
+RETURN dept.Dname%TYPE IS
+    v_dept_name dept.Dname%TYPE;
+BEGIN
+    SELECT Dname INTO v_dept_name
+    FROM emp
+    JOIN dept ON emp.Deptno = dept.Deptno
+    WHERE emp.Empno = p_empno;
+
+    RETURN v_dept_name;
+END &&
+delimiter ;
+
+===================================================================================================================================================================================
+
+Q4. 
+create insert, update, delete trigger on dept table, trigger will get fire when update operation is performed on dname colimn which will show old and new values of dname.
+create 3 different code
+
+
+delimiter &&
+CREATE TRIGGER dept_insert_trigger
+AFTER INSERT ON dept
+FOR EACH ROW
+BEGIN
+	insert into newemp(old.Dname,new.newDname);   
+END &&
+delimiter ;
+
+
+delimiter &&
+CREATE TRIGGER dept_update_trigger
+AFTER update ON dept
+FOR EACH ROW
+BEGIN
+    INSERT INTO newemp (newDname) VALUES (new.Dname);
+END &&
+delimiter ;
+
+
+delimiter &&
+CREATE TRIGGER dept_delete_trigger
+AFTER DELETE ON dept
+FOR EACH ROW
+BEGIN
+    INSERT INTO newemp (newDname) VALUES (old.Dname);
+END &&
+delimiter ;
+
+
+==================================================================================================================================================================================
+
+
+
+
+
+
+
